@@ -153,7 +153,11 @@ class StockApp:
                         if daily_data.volume > highVolume:
                             highVolume = daily_data.volume
      
-                        priceChange = lowPrice-highPrice
+                        # Change in price
+                        priceChange = stock.DataList[-1].close - stock.DataList[0].close
+                        
+                        # Profit/Loss
+                        profitLoss = priceChange * stock.shares
                         
                     if count > 0:
                         self.stockReport.insert(END,"Summary Data--\n\n")
@@ -164,7 +168,7 @@ class StockApp:
                         self.stockReport.insert(END,"High Volume: " + str(highVolume) + "\n")
                         self.stockReport.insert(END,"Average Volume: " + "{:,.2f}".format(volume_total/count) + "\n\n")
                         self.stockReport.insert(END,"Change in Price: " + "${:,.2f}".format(priceChange) + "\n")
-                        self.stockReport.insert(END,"Profit/Loss: " + "${:,.2f}".format(priceChange * stock.shares) + "\n")
+                        self.stockReport.insert(END,"Profit/Loss: " + "${:,.2f}".format(profitLoss) + "\n")
                     else:
                         self.stockReport.insert(END,"*** No daily history.")
     
@@ -215,7 +219,7 @@ class StockApp:
     # Display stock price chart
     def display_chart(self):
         if not self.stockList.curselection():
-            return  # tidak ada stock yang dipilih
+            return
     
         symbol = self.stockList.get(self.stockList.curselection())
     
@@ -243,8 +247,6 @@ class StockApp:
         plt.tight_layout()
     
         plt.show()
-                            
-
 
 def main():
         app = StockApp()
