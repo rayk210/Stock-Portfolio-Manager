@@ -125,7 +125,7 @@ def investment_type(stock_list):
         trad_acct.add_stock(temp_list)
 
 # Function to create stock chart
-def display_stock_chart(stock_list,symbol):
+def display_stock_chart(stock_list, symbol):
     date = []
     price = []
     volume = []
@@ -135,14 +135,20 @@ def display_stock_chart(stock_list,symbol):
         if stock.symbol == symbol:
             company = stock.name
             for dailyData in stock.DataList:
-                date.append(dailyData.date)
+                # Convert data string to datetime
+                date.append(datetime.strptime(dailyData.date, '%Y-%m-%d'))
                 price.append(dailyData.close)
                 volume.append(dailyData.volume)
     
-    plt.plot(date, price)
+    plt.plot(date, price, marker='o')
     plt.xlabel("Date")
     plt.ylabel("Price")
     plt.title(company)
+    
+    plt.gcf().autofmt_xdate()
+    
+    plt.tight_layout()
+    
     plt.show()
 
 # Display Chart

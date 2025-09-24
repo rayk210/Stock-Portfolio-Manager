@@ -212,26 +212,38 @@ class StockApp:
             self.display_stock_data()
             messagebox.showinfo("Import Complete",symbol + "Import Complete")   
     
-    # Display stock price chart.
+    # Display stock price chart
     def display_chart(self):
+        if not self.stockList.curselection():
+            return  # tidak ada stock yang dipilih
+    
         symbol = self.stockList.get(self.stockList.curselection())
-           
+    
         date = []
         price = []
         volume = []
         company = ""
+    
         for stock in self.stock_list:
             if stock.symbol == symbol:
                 company = stock.name
                 for dailyData in stock.DataList:
-                    date.append(dailyData.date)
+            
+                    date.append(datetime.strptime(dailyData.date, '%m/%d/%Y'))
                     price.append(dailyData.close)
                     volume.append(dailyData.volume)
-                plt.plot(date,price)
-                plt.xlabel('Date')
-                plt.ylabel('Price')
-                plt.title(company)
-                plt.show() 
+    
+        plt.plot(date, price, marker='o')
+        plt.xlabel('Date')
+        plt.ylabel('Price')
+        plt.title(company)
+    
+        plt.gcf().autofmt_xdate()
+    
+        plt.tight_layout()
+    
+        plt.show()
+                            
 
 
 def main():
